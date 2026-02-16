@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 
-# Use the exact filenames shown in your folder
 kpi = pd.read_csv("global_partners_gold.kpi_summary_gold.csv")
 cat = pd.read_csv("global_partners_gold.category_revenue_gold.csv")
 
