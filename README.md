@@ -9,6 +9,23 @@ Raw order data from SQL Server is ingested, transformed with AWS Glue, stored in
 
 The goal is to demonstrate how raw operational data can be transformed into business-ready analytics datasets.
 
+Pipeline Orchestration & Query Layer
+
+The Global Partners pipeline is orchestrated using AWS Glue jobs which perform data transformation from raw datasets into analytics-ready gold tables.
+
+Glue jobs can be triggered through:
+
+• Manual execution during development
+• Scheduled triggers for batch processing
+• Event-based orchestration using AWS workflows
+
+After transformation, datasets are registered in the AWS Glue Data Catalog using crawlers.
+This enables Athena to query the data directly without moving it.
+
+The Streamlit dashboard connects to Athena using AWS Wrangler to execute SQL queries and display real-time business metrics.
+
+This architecture separates compute, storage, and visualization layers following modern lakehouse best practices.
+
 🏗 Architecture
 
 SQL Server → AWS Glue → Amazon S3 → Glue Data Catalog → Athena → Streamlit
