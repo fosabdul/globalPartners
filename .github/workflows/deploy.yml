@@ -1,0 +1,37 @@
+name: Deploy GlobalPartners Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Upload Glue scripts to S3
+        run: |
+          aws s3 cp glue_jobs/gp_mysql_to_s3_raw_order_items.py s3://aws-glue-assets-530917763100-us-east-1/scripts/
+          aws s3 cp glue_jobs/gp_mysql_to_s3_raw_order_item_options.py s3://aws-glue-assets-530917763100-us-east-1/scripts/
+          aws s3 cp glue_jobs/gp_mysql_to_s3_raw_date_dim.py s3://aws-glue-assets-530917763100-us-east-1/scripts/
+          aws s3 cp glue_jobs/gp_transform_curated_analytics.py s3://aws-glue-assets-530917763100-us-east-1/scripts/
+          echo "✅ Glue scripts uploaded"
+
+      - name: Upload dashboard to S3
+        run: |
+          aws s3 cp dashboard/dashboard.py s3://global-partners-data/dashboard/dashboard.py
+          echo "✅ Dashboard uploaded"
+
+      - name: Notify success
+        run: echo "🚀 Deployment complete!"
